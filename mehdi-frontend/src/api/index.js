@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000';
+const url = 'http://52.86.30.214:5000';
 
 export const login = (user) => axios.post(url + '/user/login', {...user });
 export const signUp = (user) => axios.post(url + '/user/signup', {...user });

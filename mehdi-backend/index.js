@@ -7,19 +7,25 @@ import { verifyUser } from './api/middleware.js';
 import router from './api/api.js';
 import bodyParser from 'body-parser';
 
+dotenv.config();
+
 let __dirname = path.resolve();
 
 const app = express();
+
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(bodyParser({ limit: '50mb' }));
-dotenv.config();
+
 const db = process.env.MONGO_URI;
 
-if (db !== '[YOUR CONNECTION STRING HERE]') {
-    mongoose
-        .connect(db, { useNewUrlParser: true })
-        .then(() => console.log('MongoDB Connected'))
-        .catch(err => console.log(err));
+console.log(db)
+if (db) {
+  mongoose
+    .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err) => console.error('MongoDB Connection Error:', err));
+} else {
+  console.error('MongoDB URI is missing in the environment variables');
 }
 
 app.use(cors('*'));

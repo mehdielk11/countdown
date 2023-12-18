@@ -3,29 +3,21 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 const createUser = async(req, res) => {
-    console.log("------------------")
-    console.log("start create user, req body: ", req.body)
     const { email, password, name } = req.body;
     const newUser = new User({
         email,
         password,
         name,
     });
-    console.log("new user: ", newUser)
     try {
-        console.log("try to save user")
         const user = await newUser.save();
-        console.log("user saved: ", user)
         // res.json({ message: 'Successfully signed in' });
-        console.log("try to sign token")
         const token = jwt.sign({ _id: user._id, userId: user._id },
             process.env.JWT_SECRET,
         );
-        console.log("token: ", token)
         const { _id, name, email } = user;
         res.json({ token, user: { _id, name, email } });
     } catch (error) {
-        console.log("Create User fail:", error) 
         res.status(500).json({ error: error.message });
     }
 };
